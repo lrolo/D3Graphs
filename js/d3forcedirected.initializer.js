@@ -29,8 +29,8 @@ $(document).ready(function(){
         var simulation = d3.forceSimulation()
             .force('link', d3.forceLink().id(function(d) {
                 return d.Identifier;
-            }).distance (40))
-            .force('charge', d3.forceManyBody().strength(-width))
+            }).distance (10))
+            .force('charge', d3.forceManyBody().strength(-width * 2))
             .force('center', d3.forceCenter(width / 2, height / 2))
             .force("collide", d3.forceCollide(20))
             .force('y', d3.forceY())
@@ -48,7 +48,6 @@ $(document).ready(function(){
             .html(function(d) {
 
                 var attributeList = '';
-
 
                 if (d.AttributeList.hasOwnProperty('MachineType')){
                     attributeList += '<p>Machine type: '+ d.AttributeList.MachineType +'</p>';
@@ -87,7 +86,7 @@ $(document).ready(function(){
                     '<h2>'+ d.Type+'</h2>' +
                     '<div>'+ attributeList+'</div>' +
                     '</div>';
-            })
+            });
 
         svg.call(tip);
 
@@ -190,7 +189,7 @@ $(document).ready(function(){
         }
 
         function dragstarted(d) {
-            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+            if (!d3.event.active) simulation.alphaTarget(0.1).restart();
             d.fx = d.x;
             d.fy = d.y;
         }
@@ -204,21 +203,6 @@ $(document).ready(function(){
             if (!d3.event.active) simulation.alphaTarget(0);
             d.fx = null;
             d.fy = null;
-        }
-
-        function flatten(root) {
-            var nodes = [];
-            function recurse(node, depth) {
-                if (node.children) {
-                    node.children.forEach(function(child) {
-                        recurse(child, depth + 1);
-                    });
-                }
-                node.depth = depth;
-                nodes.push(node);
-            }
-            recurse(root, 1);
-            return nodes;
         }
 
     });
